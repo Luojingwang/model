@@ -333,6 +333,14 @@ SAT_tropical = mean(mean( Tair_past(15:26,:) .* pars.rel_contrib(15:26,:)*0.67 )
 %%%% equatorial surface temperature (equal contribution from 2S and 2N lat bands)
 SAT_equator = mean(mean( Tair_past(20:21,:)))*contribution_past  +  mean(mean( Tair_future(20:21,:) ))*contribution_future  ;
 
+%%% Air temperature in North China ofr ~300 Ma
+Tair_NC_past = Tair_past(23,38) ;
+Tair_NC_future = Tair_future(23,38) ;
+Tair_NC = Tair_NC_past*contribution_past + Tair_NC_future*contribution_future ;
+
+
+%%%% CIA calculation
+CIA_NC = Tair_NC*(3/2) + 47.5 ;
 
 %%%% set assumed ice temperature
 Tcrit = -10 ;
@@ -691,6 +699,10 @@ if sensanal == 0
     workingstate.dSSr(stepnumber,1) = dSSr ;
     workingstate.relativenewp(stepnumber,1) = newp/pars.newp0 ;
     workingstate.erosion_tot(stepnumber,1) = erosion_tot ;
+    
+    workingstate.Tair_NC(stepnumber,1) = Tair_NC ;
+    workingstate.CIA_NC(stepnumber,1) = CIA_NC ;
+    
     %%%%%%%% print time
     if pars.runcontrol == -2
         workingstate.time_myr(stepnumber,1) = t.*1e-6 ;

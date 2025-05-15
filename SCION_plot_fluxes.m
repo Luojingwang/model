@@ -368,6 +368,20 @@ ylim([0 90])
 colormap(gca,'gray')
 
 
+%%%% CIA figure
+figure
+subplot(2,1,1)
+plot(run.state.time_myr,run.state.Tair_NC)
+xlim([pars.whenstart/1e6 pars.whenend/1e6])
+xlabel('Time (Ma)')
+ylabel('Tair NC')
+
+subplot(2,1,2)
+plot(run.state.time_myr,run.state.CIA_NC)
+xlim([pars.whenstart/1e6 pars.whenend/1e6])
+xlabel('Time (Ma)')
+ylabel('CIA NC')
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%   Cleanup workspace   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
