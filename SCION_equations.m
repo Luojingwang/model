@@ -498,6 +498,17 @@ denit = pars.k_denit * ( 1 + ( ANOX / (1-pars.k_oxfrac) )  ) * (N/pars.N0) ;
 %%%% reductant input
 reductant_input = pars.k_reductant_input * DEGASS ;
 
+%%%% CO2_input 
+CO2_pulse = 1e13 * interp1( ...
+    [-600, -298.36, -297.16, -294.66, -293.26, -290.77, -288.06, -286.99, -286.54, ...
+     -285.34, -283.98, -282.13, -279.60, -278.89, -276.87, -275.91, -272.00, 0], ...
+    [    0,      0,      1,     -1,    -0.5,     1.2,     1,    -0.2,     1.1, ...
+         1,   -1.2,   -0.4,      1,     2.1,   -1,      -1,      1,     0], ...
+    t_geol, 'linear', 0);  
+CO2_pulse = CO2_pulse(:)'; 
+d13c_pulse = -5;
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%   Reservoir calculations  %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -510,7 +521,7 @@ dy(1) = psea - mopb - capb - fepb ;
 dy(2) = locb + mocb - oxidw  - ocdeg  + 2*(mpsb - pyrw  - pyrdeg) - reductant_input ;
 
 %%% Carbon dioxide
-dy(3) = -locb - mocb + oxidw + ocdeg + ccdeg + carbw - mccb - sfw  + reductant_input ;
+dy(3) = -locb - mocb + oxidw + ocdeg + ccdeg + carbw - mccb - sfw  + reductant_input  + CO2_pulse ;
 
 %%% Sulphate
 dy(4) = gypw + pyrw - mgsb - mpsb + gypdeg + pyrdeg ;
@@ -560,7 +571,7 @@ dy(14) =  mpsb*( delta_mpsb )  - pyrw*delta_PYR  - pyrdeg*delta_PYR ;
 dy(15) =  mgsb*d34s_S   - gypw*delta_GYP  - gypdeg*delta_GYP ;
 
 %%% delta_A * A
-dy(16) = -locb*(  delta_locb ) -mocb*( delta_mocb ) + oxidw*delta_G + ocdeg*delta_G + ccdeg*delta_C + carbw*delta_C - mccb*delta_mccb - sfw*delta_mccb + reductant_input*-5 ;
+dy(16) = -locb*(  delta_locb ) -mocb*( delta_mocb ) + oxidw*delta_G + ocdeg*delta_G + ccdeg*delta_C + carbw*delta_C - mccb*delta_mccb - sfw*delta_mccb + reductant_input*-5 + CO2_pulse.* d13c_pulse ;
 
 %%% delta_S * S
 dy(17) = gypw*delta_GYP + pyrw*delta_PYR -mgsb*d34s_S - mpsb*( delta_mpsb ) + gypdeg*delta_GYP + pyrdeg*delta_PYR ; 
